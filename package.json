@@ -1,0 +1,36 @@
+{
+  "name": "html-minify",
+  "version": "0.0.1",
+  "description": "minify html, and any CSS or JS included in your markup",
+  "bin": {
+    "htmlminify": "./bin/htmlminify"
+  },
+  "main": "html-minify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yize/html-minify.git"
+  },
+  "keywords": [
+    "html",
+    "minify"
+  ],
+  "author": "yize <yize.shc@gmail.com> (http://shaohanchao.cn)",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/yize/html-minify/issues"
+  },
+  "dependencies": {
+    "clean-css": "~1.0.5",
+    "uglify-js": "~1.3.4",
+    "html-minifier": "~0.5.2"
+  },
+  "devDependencies": {},
+  "gitHead": "fc1b05ce7313a894fecddcab778b67de1fa1a7b7",
+  "directories": {
+    "test": "test"
+  }
+}
