@@ -1,4 +1,6 @@
-wc-minify
+html-minify
 =========
 
-minify web components files
+minify html and any css and js
+
+
