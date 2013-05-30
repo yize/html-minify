@@ -3,7 +3,7 @@
 var util = require('util');
 var fs = require('fs');
 var path = require('path');
-var CleanCSS = require('../index');
+var Htmlminify = require('../index.js');
 
 var commands = require('commander');
 
@@ -25,13 +25,13 @@ commands
 
 commands.on('--help', function() {
   util.puts('  Examples:\n');
-  util.puts('    %> cleancss one.css');
-  util.puts('    %> cleancss -o one-min.css one.css');
+  util.puts('    %> htmlminify one.css');
+  util.puts('    %> htmlminify -o one-min.css one.css');
   if (isWindows) {
-    util.puts('    %> type one.css two.css three.css | cleancss -o merged-and-minified.css');
+    util.puts('    %> type one.css two.css three.css | htmlminify -o merged-and-minified.css');
   } else {
-    util.puts('    %> cat one.css two.css three.css | cleancss -o merged-and-minified.css');
-    util.puts('    %> cat one.css two.css three.css | cleancss | gzip -9 -c > merged-minified-and-gzipped.css.gz');
+    util.puts('    %> cat one.css two.css three.css | htmlminify -o merged-and-minified.css');
+    util.puts('    %> cat one.css two.css three.css | htmlminify | gzip -9 -c > merged-minified-and-gzipped.css.gz');
   }
   util.puts('');
   process.exit();
@@ -43,7 +43,7 @@ var options = {
   source: null,
   target: null
 };
-var cleanOptions = {};
+var htmlOptions = {};
 var fromStdin = !process.env['__DIRECT__'] && !process.stdin.isTTY;
 
 // If no sensible data passed in just print help and exit
@@ -52,32 +52,29 @@ if (!fromStdin && commands.args.length == 0) {
   return 0;
 }
 
-// Now coerce commands into CleanCSS configuration...
+// Now coerce commands into Htmlminify configuration...
 if (commands.output)
   options.target = commands.output;
 if (commands.removeEmpty)
-  cleanOptions.removeEmpty = true;
+  htmlOptions.removeEmpty = true;
 if (commands.keepLineBreaks)
-  cleanOptions.keepBreaks = true;
+  htmlOptions.keepBreaks = true;
 if (commands.s1)
-  cleanOptions.keepSpecialComments = 1;
+  htmlOptions.keepSpecialComments = 1;
 if (commands.s0)
-  cleanOptions.keepSpecialComments = 0;
+  htmlOptions.keepSpecialComments = 0;
 if (commands.root)
-  cleanOptions.root = commands.root;
+  htmlOptions.root = commands.root;
 if (commands.args.length > 0) {
   var source = commands.args[0];
   options.source = source;
-  cleanOptions.relativeTo = path.dirname(path.resolve(source));
+  htmlOptions.relativeTo = path.dirname(path.resolve(source));
 }
 
 // ... and do the magic!
 if (options.source) {
-  fs.readFile(options.source, 'utf8', function(error, text) {
-    if (error)
-      throw error;
-    output(CleanCSS.process(text, cleanOptions));
-  });
+  var text = fs.readFileSync(options.source, {encoding:'utf-8'});
+  output(Htmlminify(text, htmlOptions));
 } else {
   var stdin = process.openStdin();
   stdin.setEncoding('utf-8');
@@ -86,13 +83,13 @@ if (options.source) {
     text += chunk;
   });
   stdin.on('end', function() {
-    output(CleanCSS.process(text, cleanOptions));
+    output(Htmlminify(text, htmlOptions));
   });
 }
 
 function output(cleaned) {
-  if (options.target)
-    fs.writeFileSync(options.target, cleaned, 'utf8');
+  if (options.target){
+    fs.writeFileSync(options.target, cleaned, 'utf8');}
   else
     process.stdout.write(cleaned);
 };
