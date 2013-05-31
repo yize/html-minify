@@ -1,6 +1,6 @@
 {
   "name": "html-minify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "minify html, and any CSS or JS included in your markup",
   "bin": {
     "htmlminify": "./bin/htmlminify"
@@ -26,7 +26,8 @@
   "dependencies": {
     "clean-css": "~1.0.5",
     "uglify-js": "~1.3.4",
-    "html-minifier": "~0.5.2"
+    "html-minifier": "~0.5.2",
+    "commander": "~1.1.1"
   },
   "devDependencies": {},
   "gitHead": "fc1b05ce7313a894fecddcab778b67de1fa1a7b7",

@@ -3,7 +3,7 @@
 var util = require('util');
 var fs = require('fs');
 var path = require('path');
-var Htmlminify = require('../index.js');
+var Htmlminify = require('../   index.js');
 
 var commands = require('commander');
 
