@@ -11,6 +11,15 @@ You can either download the plugin and unzip it into to your project folder or y
 npm -g i html-minify
 ```
 
+```shell
+    %> htmlminify one.html
+    %> htmlminify -o one-min-utf8.html one-utf8.html //default charset is utf-8
+    %> htmlminify -o one-min-gbk.html one-gbk.html -c gbk
+```
+
+how to use?see this:
+
+[]()
 ## Usage
 
 The module exports the html-minify function, so you can use it with :
@@ -34,3 +43,7 @@ var text = fs.readFileSync("/Any/Random/HTML.html", encoding='utf8');
 var min = htmlminify(text);
 puts(min);
 ```
+
+## history
+2013-05-31 cli support charset
+2013-05-30 first update
