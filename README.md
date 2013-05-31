@@ -31,6 +31,6 @@ var puts = require('util').puts,
 fs = require('fs'),
 var htmlminify = require('./html-minify');
 var text = fs.readFileSync("/Any/Random/HTML.html", encoding='utf8');
-var min = htmlminify(css);
+var min = htmlminify(text);
 puts(min);
 ```
