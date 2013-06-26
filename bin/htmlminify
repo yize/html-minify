@@ -15,96 +15,92 @@ var isWindows = process.platform == 'win32';
 
 // Specify commander options to parse command line params correctly
 commands
-  .version(buildVersion, '-v, --version')
-  .usage('[options] <source-file>')
-  .option('-e, --remove-empty', 'Remove empty declarations (e.g. a{})')
-  .option('-b, --keep-line-breaks', 'Keep line breaks')
-  .option('--s0', 'Remove all special comments (i.e. /*! special comment */)')
-  .option('--s1', 'Remove all special comments but the first one')
-  .option('-r, --root [root-path]', 'Set a root path to which resolve absolute @import rules')
-  .option('-o, --output [output-file]', 'Use [output-file] as output instead of stdout')
-  .option('-c, --charset [charset]','charset');
+    .version(buildVersion, '-v, --version')
+    .usage('[options] <source-file>')
+    .option('-e, --remove-empty', 'Remove empty declarations (e.g. a{})')
+    .option('-b, --keep-line-breaks', 'Keep line breaks')
+    .option('--s0', 'Remove all special comments (i.e. /*! special comment */)')
+    .option('--s1', 'Remove all special comments but the first one')
+    .option('-r, --root [root-path]', 'Set a root path to which resolve absolute @import rules')
+    .option('-o, --output [output-file]', 'Use [output-file] as output instead of stdout')
+    .option('-c, --charset [charset]', 'charset');
 
-commands.on('--help', function() {
-  util.puts('  Examples:\n');
-  util.puts('    %> htmlminify one.html');
-  util.puts('    %> htmlminify -o one-min.html one.html');
-  util.puts('    %> htmlminify -o one-min.html one.html -c gbk');
-  if (isWindows) {
-    util.puts('    %> type one.html two.html three.html | htmlminify -o merged-and-minified.html');
-  } else {
-    util.puts('    %> cat one.html two.html three.html | htmlminify -o merged-and-minified.html');
-    util.puts('    %> cat one.html two.html three.html | htmlminify | gzip -9 -c > merged-minified-and-gzipped.html.gz');
-  }
-  util.puts('');
-  process.exit();
+commands.on('--help', function () {
+    util.puts('  Examples:\n');
+    util.puts('    %> htmlminify one.html');
+    util.puts('    %> htmlminify -o one-min.html one.html');
+    util.puts('    %> htmlminify -o one-min.html one.html -c gbk');
+    if (isWindows) {
+        util.puts('    %> type one.html two.html three.html | htmlminify -o merged-and-minified.html');
+    } else {
+        util.puts('    %> cat one.html two.html three.html | htmlminify -o merged-and-minified.html');
+        util.puts('    %> cat one.html two.html three.html | htmlminify | gzip -9 -c > merged-minified-and-gzipped.html.gz');
+    }
+    util.puts('');
+    process.exit();
 });
 
 commands.parse(process.argv);
 
 var options = {
-  source: null,
-  target: null,
-  charset:'utf-8'
+    source: null,
+    target: null,
+    charset: 'utf-8'
 };
 var htmlOptions = {};
 var fromStdin = !process.env['__DIRECT__'] && !process.stdin.isTTY;
 
 // If no sensible data passed in just print help and exit
 if (!fromStdin && commands.args.length == 0) {
-  commands.outputHelp();
-  return 0;
+    commands.outputHelp();
+    return 0;
 }
 
 // Now coerce commands into Htmlminify configuration...
 if (commands.output)
-  options.target = commands.output;
-if (commands.charset){
-  options.charset = commands.charset;
+    options.target = commands.output;
+if (commands.charset) {
+    options.charset = commands.charset;
 }
 if (commands.removeEmpty)
-  htmlOptions.removeEmpty = true;
+    htmlOptions.removeEmpty = true;
 if (commands.keepLineBreaks)
-  htmlOptions.keepBreaks = true;
+    htmlOptions.keepBreaks = true;
 if (commands.s1)
-  htmlOptions.keepSpecialComments = 1;
+    htmlOptions.keepSpecialComments = 1;
 if (commands.s0)
-  htmlOptions.keepSpecialComments = 0;
+    htmlOptions.keepSpecialComments = 0;
 if (commands.root)
-  htmlOptions.root = commands.root;
+    htmlOptions.root = commands.root;
 if (commands.args.length > 0) {
-  var source = commands.args[0];
-  options.source = source;
-  htmlOptions.relativeTo = path.dirname(path.resolve(source));
+    var source = commands.args[0];
+    options.source = source;
+    htmlOptions.relativeTo = path.dirname(path.resolve(source));
 }
 
 // ... and do the magic!
 if (options.source) {
-  var text = fs.readFileSync(options.source,{encoding:'binary'});
-  if(options.charset != 'utf-8'){
-  text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(new Buffer(text,'binary')).toString();
-}
-  output(Htmlminify(text, htmlOptions));
-} else {
-  var stdin = process.openStdin();
-  stdin.setEncoding('binary');
-  var text = '';
-  stdin.on('data', function(chunk) {
-    text += chunk;
-  });
-  stdin.on('end', function() {
+    var text = fs.readFileSync(options.source, {encoding: 'binary'});
+        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(new Buffer(text, 'binary')).toString();
     output(Htmlminify(text, htmlOptions));
-  });
+} else {
+    var stdin = process.openStdin();
+    stdin.setEncoding('binary');
+    var text = '';
+    stdin.on('data', function (chunk) {
+        text += chunk;
+    });
+    stdin.on('end', function () {
+        output(Htmlminify(text, htmlOptions));
+    });
 }
 
 function output(cleaned) {
 
-  if (options.target){
-    if(options.charset != 'utf-8'){
-    cleaned = new Iconv('UTF-8',options.charset+'//TRANSLIT//IGNORE').convert(cleaned);
+    if (options.target) {
+        cleaned = new Iconv('UTF-8', options.charset + '//TRANSLIT//IGNORE').convert(cleaned);
+        fs.writeFileSync(options.target, cleaned);
     }
-    fs.writeFileSync(options.target, cleaned);
-    }
-  else
-    process.stdout.write(cleaned);
-};
+    else
+        process.stdout.write(cleaned);
+}
