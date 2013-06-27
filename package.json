@@ -18,9 +18,8 @@
         "minify"
     ],
     "scripts": {
-        "test": [
-            "nodeunit test/html_minify_test.js"
-        ]
+        "test": "nodeunit test/html_minify_test.js"
+
     },
     "author": "yize <yize.shc@gmail.com> (http://shaohanchao.cn)",
     "license": "MIT",
