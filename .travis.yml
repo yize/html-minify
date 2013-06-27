@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "0.8"
+  - "0.10"
+before_script:
+  - npm install -g nodeunit
+  - htmlminify -o test/fixtures/index.html test/ori/index.html
+  - htmlminify -o test/fixtures/index-gbk.html test/ori/index-gbk.html -c gbk

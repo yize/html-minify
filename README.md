@@ -3,6 +3,8 @@
 This is a node.js module that minimize HTML files with any CSS & JS.
 the css minify use cssmin,the html minify use the html-minifier
 
+[![Build Status](https://travis-ci.org/yize/html-minify.png?branch=master)](https://travis-ci.org/yize/html-minify)
+
 ## Installation
 
 You can either download the plugin and unzip it into to your project folder or you can use npm to install the cssmin package.
