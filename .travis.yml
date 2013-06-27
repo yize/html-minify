@@ -4,5 +4,5 @@ node_js:
   - "0.10"
 before_script:
   - npm install -g nodeunit
-  - htmlminify -o test/fixtures/index.html test/ori/index.html
-  - htmlminify -o test/fixtures/index-gbk.html test/ori/index-gbk.html -c gbk
+  - node bin/htmlminify -o test/fixtures/index.html test/ori/index.html
+  - node bin/htmlminify -o test/fixtures/index-gbk.html test/ori/index-gbk.html -c gbk
