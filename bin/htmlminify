@@ -80,8 +80,8 @@ if (commands.args.length > 0) {
 
 // ... and do the magic!
 if (options.source) {
-    var text = fs.readFileSync(options.source, {encoding: 'binary'});
-        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(new Buffer(text, 'binary')).toString('utf8');
+    var text = fs.readFileSync(options.source);
+        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(text).toString();
     output(Htmlminify(text, htmlOptions));
 } else {
     var stdin = process.openStdin();
