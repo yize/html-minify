@@ -47,7 +47,7 @@ puts(min);
 ```
 
 ## history
-
+- 2013-07-03 change iconv to iconv-lite
 - 2013-06-26 fix utf-8 charset bug
 - 2013-05-31 cli support charset
 - 2013-05-30 first update
