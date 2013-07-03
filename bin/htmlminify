@@ -4,7 +4,7 @@ var util = require('util');
 var fs = require('fs');
 var path = require('path');
 var Htmlminify = require('../index.js');
-var Iconv = require('iconv').Iconv;
+var iconv = require('iconv-lite');
 var Buffer = require('buffer').Buffer;
 var commands = require('commander');
 
@@ -81,7 +81,8 @@ if (commands.args.length > 0) {
 // ... and do the magic!
 if (options.source) {
     var text = fs.readFileSync(options.source);
-        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(text).toString();
+//        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(text).toString();
+    text = iconv.decode(text,options.charset);
     output(Htmlminify(text, htmlOptions));
 } else {
     var stdin = process.openStdin();
@@ -98,7 +99,8 @@ if (options.source) {
 function output(cleaned) {
 
     if (options.target) {
-        cleaned = new Iconv('UTF-8', options.charset + '//TRANSLIT//IGNORE').convert(cleaned);
+//        cleaned = new Iconv('UTF-8', options.charset + '//TRANSLIT//IGNORE').convert(cleaned);
+        cleaned = iconv.encode(cleaned,options.charset);
         fs.writeFileSync(options.target, cleaned);
     }
     else
