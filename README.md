@@ -1,5 +1,5 @@
-## Description [![Build Status](https://travis-ci.org/yize/html-minify.png?branch=master)](https://travis-ci.org/yize/html-minify)
-               [![Dependency Status](https://gemnasium.com/yize/html-minify.png)](https://gemnasium.com/yize/html-minify)
+## Description [![Build Status](https://travis-ci.org/yize/html-minify.png?branch=master)](https://travis-ci.org/yize/html-minify) [![Dependency Status](https://gemnasium.com/yize/html-minify.png)](https://gemnasium.com/yize/html-minify)
+
 
 This is a node.js module that minimize HTML files with any CSS & JS.
 the css minify use cssmin,the html minify use the html-minifier
