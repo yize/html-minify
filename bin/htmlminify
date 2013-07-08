@@ -83,7 +83,9 @@ if (options.source) {
     var text = fs.readFileSync(options.source);
 //        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(text).toString();
     text = iconv.decode(text,options.charset);
-    output(Htmlminify(text, htmlOptions));
+    Htmlminify(text,function(html){
+        output(html);
+    });
 } else {
     var stdin = process.openStdin();
     stdin.setEncoding('binary');
@@ -92,7 +94,9 @@ if (options.source) {
         text += chunk;
     });
     stdin.on('end', function () {
-        output(Htmlminify(text, htmlOptions));
+        Htmlminify(text,function(html){
+            output(html);
+        });
     });
 }
 

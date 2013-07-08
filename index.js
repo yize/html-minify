@@ -4,6 +4,6 @@
  */
 "use strict";
 var minify = require('./lib/minify.js');
-module.exports=function(cont){
-    return minify(cont);
+module.exports=function(cont,callback){
+    minify(cont,callback);
 };

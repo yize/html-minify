@@ -15,6 +15,16 @@ module.exports = {
         test.done();
     },
 
+    web: function (test) {
+        test.expect(1);
+
+        var actual = fs.readFileSync('test/fixtures/tags.html','utf8').toString();
+        var expected = fs.readFileSync('test/expected/tags.html','utf8').toString();
+        test.equal(actual, expected, 'should describe what the default behavior is.');
+
+        test.done();
+    },
+
     gbk: function (test) {
         test.expect(1);
 
