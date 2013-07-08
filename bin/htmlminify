@@ -3,10 +3,11 @@
 var util = require('util');
 var fs = require('fs');
 var path = require('path');
-var Htmlminify = require('../index.js');
+var Htmlminify = require('../lib/minify').minify;
 var iconv = require('iconv-lite');
 var Buffer = require('buffer').Buffer;
 var commands = require('commander');
+
 
 var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
 var buildVersion = JSON.parse(packageConfig).version;
@@ -17,10 +18,6 @@ var isWindows = process.platform == 'win32';
 commands
     .version(buildVersion, '-v, --version')
     .usage('[options] <source-file>')
-    .option('-e, --remove-empty', 'Remove empty declarations (e.g. a{})')
-    .option('-b, --keep-line-breaks', 'Keep line breaks')
-    .option('--s0', 'Remove all special comments (i.e. /*! special comment */)')
-    .option('--s1', 'Remove all special comments but the first one')
     .option('-r, --root [root-path]', 'Set a root path to which resolve absolute @import rules')
     .option('-o, --output [output-file]', 'Use [output-file] as output instead of stdout')
     .option('-c, --charset [charset]', 'charset');
@@ -47,7 +44,12 @@ var options = {
     target: null,
     charset: 'utf-8'
 };
-var htmlOptions = {};
+var htmlOptions = {
+    collapseWhitespace: true,
+    removeComments: true
+};
+
+
 var fromStdin = !process.env['__DIRECT__'] && !process.stdin.isTTY;
 
 // If no sensible data passed in just print help and exit
@@ -62,16 +64,6 @@ if (commands.output)
 if (commands.charset) {
     options.charset = commands.charset;
 }
-if (commands.removeEmpty)
-    htmlOptions.removeEmpty = true;
-if (commands.keepLineBreaks)
-    htmlOptions.keepBreaks = true;
-if (commands.s1)
-    htmlOptions.keepSpecialComments = 1;
-if (commands.s0)
-    htmlOptions.keepSpecialComments = 0;
-if (commands.root)
-    htmlOptions.root = commands.root;
 if (commands.args.length > 0) {
     var source = commands.args[0];
     options.source = source;
@@ -81,11 +73,8 @@ if (commands.args.length > 0) {
 // ... and do the magic!
 if (options.source) {
     var text = fs.readFileSync(options.source);
-//        text = new Iconv(options.charset, 'UTF-8//TRANSLIT//IGNORE').convert(text).toString();
-    text = iconv.decode(text,options.charset);
-    Htmlminify(text,function(html){
-        output(html);
-    });
+    text = iconv.decode(text, options.charset);
+    output(Htmlminify(text, htmlOptions));
 } else {
     var stdin = process.openStdin();
     stdin.setEncoding('binary');
@@ -94,17 +83,13 @@ if (options.source) {
         text += chunk;
     });
     stdin.on('end', function () {
-        Htmlminify(text,function(html){
-            output(html);
-        });
+        output(Htmlminify(text, htmlOptions));
     });
 }
 
 function output(cleaned) {
-
     if (options.target) {
-//        cleaned = new Iconv('UTF-8', options.charset + '//TRANSLIT//IGNORE').convert(cleaned);
-        cleaned = iconv.encode(cleaned,options.charset);
+        cleaned = iconv.encode(cleaned, options.charset);
         fs.writeFileSync(options.target, cleaned);
     }
     else

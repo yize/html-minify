@@ -5,7 +5,7 @@
   "bin": {
     "htmlminify": "./bin/htmlminify"
   },
-  "main": "html-minify.js",
+  "main": "./lib/minify.js",
   "scripts": {
     "test": "nodeunit test/html_minify_test.js"
   },
