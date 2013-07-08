@@ -5,4 +5,5 @@ node_js:
 before_script:
   - npm install -g nodeunit
   - node bin/htmlminify -o test/fixtures/index.html test/ori/index.html
+  - node bin/htmlminify -o test/fixtures/tags.html test/ori/tags.html
   - node bin/htmlminify -o test/fixtures/index-gbk.html test/ori/index-gbk.html -c gbk
