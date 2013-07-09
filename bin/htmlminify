@@ -44,6 +44,7 @@ var options = {
     target: null,
     charset: 'utf-8'
 };
+
 var htmlOptions = {
     collapseWhitespace: true,
     removeComments: true
