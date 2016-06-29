@@ -1,6 +1,6 @@
 {
   "name": "html-minify",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "minify html, and any CSS or JS included in your markup",
   "bin": {
     "htmlminify": "./bin/htmlminify"
