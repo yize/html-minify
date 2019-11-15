@@ -24,7 +24,7 @@
     "url": "https://github.com/yize/html-minify/issues"
   },
   "dependencies": {
-    "clean-css": "~3.4.12",
+    "clean-css": "~4.2.1",
     "uglify-js": "~2.6.2",
     "commander": "~2.9.0",
     "iconv-lite": "~0.4.13"
